@@ -23,8 +23,8 @@ body {
     line-height: 1.6;
     background-color: #f5f5f5;
     position: relative;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -39,8 +39,6 @@ html, body {
     overflow-x: hidden !important;
     width: 100vw;
     background: #f5f5f5; /* Light gray background */
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
 }
 
 #main-content {
@@ -60,8 +58,8 @@ html, body {
     flex-direction: column;
     justify-content: center;
     min-height: 0;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
     opacity: 1;
     transition: opacity 0.5s;
 }
@@ -209,6 +207,8 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .nav-brand {
@@ -233,6 +233,8 @@ a {
     justify-content: flex-end;
     list-style: none;
     gap: 12px;
+    width: auto;
+    flex-shrink: 0;
 }
 
 .nav-links li {
@@ -601,7 +603,7 @@ a {
 
 /* Details Section */
 .details-section {
-    padding: 80px 0;
+    padding: 0;
     background-color: var(--accent-color) !important;
 }
 
@@ -1023,10 +1025,10 @@ footer p {
     .nav-links {
         display: flex !important;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         position: static;
-        width: 100%;
+        width: auto;
         background: none;
         box-shadow: none;
         padding: 0;
@@ -1142,6 +1144,8 @@ footer p {
         padding-top: 90px;
         padding-bottom: 16px;
         max-width: 100vw;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     .countdown {
         flex-direction: row !important;
@@ -1166,6 +1170,9 @@ footer p {
         padding: 18px 2vw;
         gap: 18px;
         border-radius: 12px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
     .story-text {
         font-size: 1rem;
@@ -1191,8 +1198,10 @@ footer p {
     }
     .nav-links {
         gap: 4px;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
+        width: auto;
+        flex-shrink: 0;
     }
     .nav-icon-circle {
         width: 26px;
@@ -1206,6 +1215,28 @@ footer p {
     }
     .gallery-video {
         height: 180px;
+    }
+    
+    /* Gallery content mobile optimization */
+    .gallery-section {
+        padding: 20px 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .gallery-grid {
+        padding: 0 5px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Invitation text mobile optimization */
+    .invitation-text {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -1475,16 +1506,43 @@ footer p {
 
 .venues-section {
     background: none;
-    padding: 60px 0 80px 0;
+    padding: 0;
+    margin: 0;
     text-align: center;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 80px;
+    margin-top: 0;
+    overflow: visible;
+}
+
+/* Override spa-section behavior specifically for venues */
+#details .spa-section {
+    justify-content: flex-start !important;
+    overflow: visible !important;
+}
+
+/* Ensure other sections maintain proper layout */
+#home .spa-section,
+#story .spa-section,
+#gallery .spa-section,
+#entourage-invite .spa-section,
+#rsvp .spa-section {
+    justify-content: center !important;
+    overflow: hidden !important;
 }
 .venues-title {
     font-family: 'Playfair Display', cursive, serif;
     font-size: 4rem;
     color: #666666;
-    margin-bottom: 40px;
+    margin: 0 0 40px 0;
     font-weight: 400;
     letter-spacing: 2px;
+    position: relative;
+    z-index: 10;
 }
 .venues-grid {
     display: flex;
@@ -1493,20 +1551,94 @@ footer p {
     align-items: stretch;
     gap: 60px;
     flex-wrap: wrap;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 @media (max-width: 600px) {
+  /* Home Section Mobile Settings */
+  #home {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 80px !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+  }
+  
+  /* Story Section Mobile Settings */
+  #story {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 80px !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+  }
+  
+  /* Gallery Section Mobile Settings */
+  #gallery {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 80px !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+  }
+  
+  /* Venues Section Mobile Settings */
+  .venues-section {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
   .venues-grid {
     flex-direction: column;
     gap: 40px;
+    padding: 0 5px !important;
+  }
+  
+  /* Venue Section - Remove Gap */
+  #details {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  .venues-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  .venues-title {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 }
 .venue-card {
     background: none;
     box-shadow: none;
     border-radius: 0;
-    width: 420px;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1522,18 +1654,19 @@ footer p {
     }
     
     .venues-grid:has(.venue-card:only-child) .venue-card {
-        width: 600px;
-        max-width: 600px;
+        width: 700px;
+        max-width: 700px;
     }
     
     .venues-grid:has(.venue-card:only-child) .venue-img {
-        width: 550px;
-        height: 380px;
+        width: 650px;
+        height: 450px;
     }
 }
 .venue-img {
-    width: 370px;
-    height: 260px;
+    width: 100%;
+    max-width: 500px;
+    height: 320px;
     background-size: cover;
     background-position: center;
     margin-bottom: 24px;
@@ -1554,6 +1687,8 @@ footer p {
     justify-content: flex-end;
     width: 100%;
     padding-bottom: 32px;
+    position: relative;
+    z-index: 10;
 }
 .venue-name {
     font-family: 'Playfair Display', cursive, serif;
@@ -1659,17 +1794,260 @@ footer p {
   }
 }
 @media (min-width: 601px) and (max-width: 700px) {
-  .hero-content {
-    padding-bottom: 0 !important;
+  /* Home Section - Full Viewport Width */
+  #home {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 80px !important;
     margin-bottom: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100vh !important;
   }
+  
+  /* Story Section - Full Viewport Width */
+  #story {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    padding: 0 !important;
+    margin-top: 80px !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  
+  /* Hero Content - Proper Sizing and Spacing */
+  .hero-content {
+    padding: 20px !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Story Content - Proper Sizing and Spacing */
+  .story-content {
+    padding: 20px !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 20px !important;
+  }
+  
+  /* Story Section - Full Height */
+  .story-section {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Story Text - Responsive Typography */
+  .story-text {
+    font-size: clamp(1rem, 2.5vw, 1.2rem) !important;
+    line-height: 1.6 !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 20px !important;
+  }
+  
+  /* Story Images - Responsive Layout */
+  .story-images {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 20px !important;
+  }
+  
+  .story-images img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    aspect-ratio: 16/12 !important;
+    object-fit: cover !important;
+  }
+  
+  /* Hero Image - Ensure Full Visibility */
+  .hero-slideshow img,
+  .hero-slideshow .slide img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+  
+  /* Full Width Photo - Ensure Complete Display */
+  .full-width-photo {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    overflow: visible !important;
+  }
+  
+  .full-width-photo img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+  
+  /* Typography - Responsive Font Sizes */
+  .hero-content h1 {
+    font-size: clamp(3.5rem, 7vw, 6rem) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 15px !important;
+    text-align: center !important;
+    word-break: break-word !important;
+  }
+  
+  .hero-content .date {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem) !important;
+    margin-bottom: 10px !important;
+    text-align: center !important;
+  }
+  
+  .hero-content .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.2rem) !important;
+    margin-bottom: 25px !important;
+    text-align: center !important;
+  }
+  
+  /* Countdown - Proper Layout */
+  .countdown {
+    gap: clamp(12px, 2.5vw, 20px) !important;
+    margin-bottom: 0 !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    width: 100% !important;
+    position: static !important;
+    background: none !important;
+    z-index: 3 !important;
+  }
+  
+  .countdown-item {
+    min-width: 60px !important;
+    text-align: center !important;
+    padding: 10px 4px !important;
+  }
+  
+  .countdown-item span:first-child {
+    font-size: clamp(1.2rem, 3vw, 1.8rem) !important;
+  }
+  
+  .countdown-item span:last-child {
+    font-size: clamp(0.6rem, 1.5vw, 0.8rem) !important;
+  }
+  
+  /* Invitation Text - Proper Positioning */
   .invitation-text {
+    margin-top: 0 !important;
+    padding: 40px 20px !important;
+    position: relative !important;
+    z-index: 3 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Hero Section - Full Height */
+  .hero {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .hero-overlay {
+    height: 100% !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .hero-slideshow {
+    height: 100% !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+  
+  /* Hero Slideshow Images - Prevent Cutoff */
+  .hero-slideshow .slide {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+  
+  .hero-slideshow .slide img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+  
+  /* Venue Section - Remove Gap */
+  #details {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-  #home {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
+  
+  .venues-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  .venues-title {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 }
 /* Responsive Gallery Styles */
@@ -1815,7 +2193,21 @@ footer p {
   }
 }
 @media (max-width: 700px) {
-  .venues-section,
+  .venues-section {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
   .container,
   .venues-grid,
   .venue-card {
@@ -1827,18 +2219,21 @@ footer p {
     max-width: 100% !important;
     box-sizing: border-box !important;
   }
+  .venues-grid {
+    padding: 0 10px !important;
+  }
   .venue-img {
-    width: 100% !important;
-    max-width: 100% !important;
-    aspect-ratio: 16 / 7 !important;
+    width: 95% !important;
+    max-width: 95% !important;
+    aspect-ratio: 16 / 9 !important;
     height: auto !important;
-    min-height: 0 !important;
+    min-height: 200px !important;
     display: block !important;
     background-size: cover !important;
     background-position: center !important;
     background-color: #eee !important;
     border-radius: 48px !important;
-    margin: 0 2vw 18px 2vw !important;
+    margin: 0 auto 18px auto !important;
     box-sizing: border-box !important;
   }
 }
@@ -2034,6 +2429,18 @@ footer p {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
+  
+  /* Apply venue-style container settings to other sections */
+  #home .container,
+  #story .container,
+  #gallery .container {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 @media (max-width: 900px) {
   .container, .story-section, .gallery-section, .venue-card, .attire-section, .details-section, .entourage-invite-gallery, .rsvp-section {
@@ -2091,7 +2498,7 @@ footer p {
 }
 @media (max-width: 900px) {
   .details-section {
-    padding: 0 8px 24px 8px;
+    padding: 0;
   }
   .details-grid {
     display: flex;
@@ -2302,24 +2709,75 @@ footer p {
   }
 }
 
-@media (min-width: 900px) {
-  .venues-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
-    gap: 60px !important;
-    width: 100%;
-    justify-content: center;
+@media (min-width: 601px) {
+  .venues-section {
+    padding-top: 80px !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
   }
-  .venue-card {
-    flex: 1 1 0 !important;
+  .venues-grid {
+    max-width: 100% !important;
+    padding: 0 40px !important;
+    margin: 0 auto !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
-    min-width: 0;
-    max-width: 420px;
-    box-sizing: border-box !important;
+    align-items: center !important;
+  }
+  .venue-card {
+    width: 100% !important;
+    max-width: 800px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .venue-img {
+    width: 100% !important;
+    max-width: 600px !important;
+    height: 400px !important;
+    display: block !important;
+  }
+  .venue-info {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .venues-section {
+    width: 100% !important;
+    padding-top: 80px !important;
+    min-height: auto !important;
     height: auto !important;
+    overflow: visible !important;
+  }
+  .venues-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 40px !important;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
+  .venue-card {
+    width: 100% !important;
+    max-width: 800px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .venue-img {
+    width: 100% !important;
+    max-width: 600px !important;
+    height: 400px !important;
+    display: block !important;
+  }
+  .venue-info {
+    width: 100% !important;
+    text-align: center !important;
   }
 }
 
