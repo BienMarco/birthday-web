@@ -275,8 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'assets/images/7.jpg',
             'assets/images/8.jpg',
             'assets/images/9.jpg',
-            'assets/images/10.jpg',
-            'assets/images/11.jpg'
+            'assets/images/10.jpg'
         ];
         let current = 0;
         const slideshow = document.querySelector('.hero-slideshow');
