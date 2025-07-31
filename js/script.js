@@ -15,6 +15,49 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide music button initially
     if (musicToggle) musicToggle.style.display = 'none';
     
+    // Preload all gallery images for better mobile performance
+    function preloadGalleryImages() {
+        const galleryImages = [
+            'assets/images/4.jpg',
+            'assets/images/8.jpg',
+            'assets/images/10.jpg',
+            'assets/images/12.jpg',
+            'assets/images/15.jpg',
+            'assets/images/16.jpg',
+            'assets/images/17.jpg',
+            'assets/images/18.jpg',
+            'assets/images/BG1.jpg',
+            'assets/images/BG2.jpg',
+            'assets/images/BG3.jpg',
+            'assets/images/BG4.jpg',
+            'assets/images/BG5.jpg',
+            'assets/images/BG6.jpg',
+            'assets/images/BG7.jpg',
+            'assets/images/BG8.jpg',
+            'assets/images/BG9.jpg',
+            'assets/images/BG10.jpg',
+            'assets/images/BG11.jpg',
+            'assets/images/BG12.jpg',
+            'assets/images/BG13.jpg',
+            'assets/images/BG14.jpg',
+            'assets/images/BG15.jpg',
+            'assets/images/BG16.jpg',
+            'assets/images/attire-boy.jpg',
+            'assets/images/dress.jpg',
+            'assets/images/venue.png',
+            'assets/images/entourage.jpg',
+            'assets/images/Invitation card.jpg'
+        ];
+        
+        galleryImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    }
+    
+    // Start preloading images immediately
+    preloadGalleryImages();
+    
     // Only initialize splash screen if elements exist
     if (splashScreen && enterButton && mainContent) {
         // Show splash screen initially
@@ -68,16 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 
-                // Special handling for gallery page
-                if (window.location.pathname.includes('gallery.html')) {
-                    const gallerySection = document.querySelector('.gallery-section');
-                    if (gallerySection) {
-                        // Force layout recalculation
-                        void gallerySection.offsetHeight;
-                        // Ensure scrolling container is properly sized
-                        gallerySection.style.minHeight = 'calc(100vh - 200px)';
-                    }
-                }
+                // Initialize gallery after splash screen
+                initializeGallery();
             }, 1000);
         });
     } else {
@@ -100,13 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-        // Special handling for direct gallery access
-        if (window.location.pathname.includes('gallery.html')) {
-            const gallerySection = document.querySelector('.gallery-section');
-            if (gallerySection) {
-                gallerySection.style.minHeight = 'calc(100vh - 200px)';
-            }
-        }
+        // Initialize gallery immediately
+        initializeGallery();
     }
     
     // Music play/pause toggle
@@ -128,39 +158,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
     
-    navToggle.addEventListener('click', function() {
-        navLinks.classList.toggle('active');
-    });
+    if (navToggle) {
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+    }
     
     // Close mobile menu when clicking a link
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', function() {
             if (window.innerWidth <= 768) {
                 navLinks.classList.remove('active');
-            }
-        });
-    });
-    
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                const headerHeight = document.querySelector('.main-nav').offsetHeight;
-                const targetPosition = targetElement.offsetTop - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Update URL without page jump
-                history.pushState(null, null, targetId);
             }
         });
     });
@@ -177,71 +185,44 @@ document.addEventListener('DOMContentLoaded', function() {
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        const daysElement = document.getElementById('days');
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+        if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+        if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+        if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
     }
     
     updateCountdown();
     setInterval(updateCountdown, 1000);
     
-    // SPA navigation for sections
+    // Improved SPA navigation for sections
     function showSection(sectionId) {
-        document.querySelectorAll('.spa-section').forEach(sec => {
-            if (sec.id === sectionId) {
-                sec.style.display = '';
-                // Force reflow for transition
-                void sec.offsetWidth;
-                sec.classList.remove('hide');
-            } else {
-                sec.classList.add('hide');
-                setTimeout(() => {
-                    sec.style.display = 'none';
-                }, 500); // Match CSS transition duration
-            }
-        });
-        // Update nav active class
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.getAttribute('href') === '#' + sectionId) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-    function showSectionWithScale(sectionId) {
         const sections = document.querySelectorAll('.spa-section');
-        let currentSection = null;
+        const targetSection = document.getElementById(sectionId);
+        
+        if (!targetSection) return;
+        
+        // Show target section immediately
+        targetSection.style.display = '';
+        targetSection.classList.remove('hide');
+        
+        // Hide other sections with minimal delay
         sections.forEach(sec => {
-            if (!sec.classList.contains('hide')) {
-                currentSection = sec;
+            if (sec.id !== sectionId) {
+                sec.classList.add('hide');
+                // Reduced delay for better mobile performance
+                setTimeout(() => {
+                    if (sec.classList.contains('hide')) {
+                        sec.style.display = 'none';
+                    }
+                }, 200);
             }
         });
-        const nextSection = document.getElementById(sectionId);
-        if (currentSection && currentSection !== nextSection) {
-            currentSection.classList.remove('scale-in');
-            currentSection.classList.add('scale-out');
-            setTimeout(() => {
-                currentSection.classList.add('hide');
-                currentSection.classList.remove('scale-out');
-                if (nextSection) {
-                    nextSection.classList.remove('hide');
-                    nextSection.classList.add('scale-in');
-                    setTimeout(() => {
-                        nextSection.classList.remove('scale-in');
-                        window.scrollTo(0, 0);
-                    }, 400);
-                }
-            }, 400);
-        } else if (nextSection) {
-            nextSection.classList.remove('hide');
-            nextSection.classList.add('scale-in');
-            setTimeout(() => {
-                nextSection.classList.remove('scale-in');
-                window.scrollTo(0, 0);
-            }, 400);
-        }
+        
         // Update nav active class
         document.querySelectorAll('.nav-links a').forEach(link => {
             if (link.getAttribute('href') === '#' + sectionId) {
@@ -250,43 +231,75 @@ document.addEventListener('DOMContentLoaded', function() {
                 link.classList.remove('active');
             }
         });
+        
+        // Scroll to top for mobile
+        if (window.innerWidth <= 768) {
+            window.scrollTo(0, 0);
+        }
+        
+        // Force layout recalculation for gallery
+        if (sectionId === 'gallery') {
+            setTimeout(() => {
+                const gallerySection = document.querySelector('.gallery-section');
+                if (gallerySection) {
+                    void gallerySection.offsetHeight;
+                }
+            }, 100);
+        }
     }
+    
+    // Navigation click handlers
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', function(e) {
             const hash = this.getAttribute('href');
             if (hash.startsWith('#')) {
                 e.preventDefault();
-                showSection(hash.substring(1));
+                const sectionId = hash.substring(1);
+                showSection(sectionId);
                 window.location.hash = hash;
             }
         });
     });
+    
     // On load, show correct section
     let hash = window.location.hash || '#home';
     showSection(hash.substring(1));
     
-    // Hero slideshow background
-    (function() {
+    // Initialize gallery function
+    function initializeGallery() {
+        // Hero slideshow background
         const images = [
-            'assets/images/3.jpg',
-            'assets/images/4.jpg',
-            'assets/images/5.jpg',
-            'assets/images/6.jpg',
-            'assets/images/7.jpg',
-            'assets/images/8.jpg',
-            'assets/images/9.jpg',
-            'assets/images/10.jpg'
+            'assets/images/15.jpg',
+            'assets/images/16.jpg',
+            'assets/images/17.jpg',
+            'assets/images/18.jpg',
+            'assets/images/19.jpg',
+            'assets/images/20.jpg',
+            'assets/images/21.jpg',
+            'assets/images/22.jpg'
         ];
         let current = 0;
         const slideshow = document.querySelector('.hero-slideshow');
         if (!slideshow) return;
-        // Preload images
-        images.forEach(src => { const img = new Image(); img.src = src; });
+        
+        // Preload hero images
+        images.forEach(src => { 
+            const img = new Image(); 
+            img.src = src; 
+        });
+        
         function showNext() {
             slideshow.style.backgroundImage = `url('${images[current]}')`;
             current = (current + 1) % images.length;
         }
+        
         showNext();
         setInterval(showNext, 3000);
-    })();
+    }
+    
+    // Handle hash changes for direct navigation
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash || '#home';
+        showSection(hash.substring(1));
+    });
 });
