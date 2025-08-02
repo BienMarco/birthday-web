@@ -304,7 +304,10 @@ a {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: background-image 1s ease-in-out;
+    transition: background-image 1.5s ease-in-out;
+    will-change: background-image; /* Optimize for transitions */
+    backface-visibility: hidden; /* Prevent flickering */
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 #home {
@@ -318,7 +321,7 @@ a {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0,0,0,0.2);
     z-index: 2;
     pointer-events: none;
 }

@@ -15,49 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide music button initially
     if (musicToggle) musicToggle.style.display = 'none';
     
-    // Preload all gallery images for better mobile performance
-    function preloadGalleryImages() {
-        const galleryImages = [
-            'assets/images/4.jpg',
-            'assets/images/8.jpg',
-            'assets/images/10.jpg',
-            'assets/images/12.jpg',
-            'assets/images/15.jpg',
-            'assets/images/16.jpg',
-            'assets/images/17.jpg',
-            'assets/images/18.jpg',
-            'assets/images/BG1.jpg',
-            'assets/images/BG2.jpg',
-            'assets/images/BG3.jpg',
-            'assets/images/BG4.jpg',
-            'assets/images/BG5.jpg',
-            'assets/images/BG6.jpg',
-            'assets/images/BG7.jpg',
-            'assets/images/BG8.jpg',
-            'assets/images/BG9.jpg',
-            'assets/images/BG10.jpg',
-            'assets/images/BG11.jpg',
-            'assets/images/BG12.jpg',
-            'assets/images/BG13.jpg',
-            'assets/images/BG14.jpg',
-            'assets/images/BG15.jpg',
-            'assets/images/BG16.jpg',
-            'assets/images/attire-boy.jpg',
-            'assets/images/dress.jpg',
-            'assets/images/venue.png',
-            'assets/images/entourage.jpg',
-            'assets/images/Invitation card.jpg'
-        ];
-        
-        galleryImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-    }
-    
-    // Start preloading images immediately
-    preloadGalleryImages();
-    
     // Only initialize splash screen if elements exist
     if (splashScreen && enterButton && mainContent) {
         // Show splash screen initially
@@ -84,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ripple.remove();
             }, 600);
             
-            // Hide splash screen and show main content
+            // Hide splash screen and show main content (slideshow is already running)
             splashScreen.classList.add('hidden');
             setTimeout(() => {
                 splashScreen.style.display = 'none';
@@ -111,8 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 
-                // Initialize gallery after splash screen
-                initializeGallery();
+                // Ensure home section is visible (slideshow is already running)
+                const homeSection = document.getElementById('home');
+                if (homeSection) {
+                    homeSection.style.display = '';
+                    homeSection.classList.remove('hide');
+                }
             }, 1000);
         });
     } else {
@@ -135,8 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-        // Initialize gallery immediately
-        initializeGallery();
+        // Slideshow is already running from startHiddenSlideshow()
     }
     
     // Music play/pause toggle
@@ -246,6 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }, 100);
         }
+        
+        // Note: Slideshow is initialized once and managed globally
+        // No need to reinitialize when navigating to home
     }
     
     // Navigation click handlers
@@ -265,10 +228,125 @@ document.addEventListener('DOMContentLoaded', function() {
     let hash = window.location.hash || '#home';
     showSection(hash.substring(1));
     
-    // Initialize gallery function
+    // Global slideshow manager to prevent multiple instances
+    let globalSlideshowInterval = null;
+    let slideshowInitialized = false;
+    
+    // Function to reset slideshow (useful for debugging or manual reset)
+    function resetSlideshow() {
+        if (globalSlideshowInterval) {
+            clearInterval(globalSlideshowInterval);
+            globalSlideshowInterval = null;
+        }
+        slideshowInitialized = false;
+    }
+    
+    // Start slideshow immediately when page loads (hidden behind splash screen)
+    function startHiddenSlideshow() {
+        const images = [
+            'assets/images/1.jpg',
+            'assets/images/15.jpg',
+            'assets/images/16.jpg',
+            'assets/images/17.jpg',
+            'assets/images/18.jpg',
+            'assets/images/19.jpg',
+            'assets/images/20.jpg',
+            'assets/images/21.jpg',
+            'assets/images/22.jpg'
+        ];
+        
+        let current = 0;
+        const slideshow = document.querySelector('.hero-slideshow');
+        if (!slideshow) return;
+        
+        // Set first image immediately
+        slideshow.style.backgroundImage = `url('${images[0]}')`;
+        
+        function showNext() {
+            const nextIndex = (current + 1) % images.length;
+            const nextImg = new Image();
+            nextImg.onload = function() {
+                slideshow.style.backgroundImage = `url('${images[nextIndex]}')`;
+                current = nextIndex;
+            };
+            nextImg.onerror = function() {
+                slideshow.style.backgroundImage = `url('${images[nextIndex]}')`;
+                current = nextIndex;
+            };
+            nextImg.src = images[nextIndex];
+        }
+        
+        // Start slideshow immediately
+        globalSlideshowInterval = setInterval(showNext, 3000);
+        slideshowInitialized = true;
+    }
+    
+    // Start slideshow immediately when page loads
+    startHiddenSlideshow();
+    
+    // Initialize gallery function with preloaded images
+    function initializeGalleryWithImages(images) {
+        // Prevent multiple initializations
+        if (slideshowInitialized) {
+            return;
+        }
+        
+        let current = 0;
+        const slideshow = document.querySelector('.hero-slideshow');
+        if (!slideshow) return;
+        
+        // Clear any existing global interval
+        if (globalSlideshowInterval) {
+            clearInterval(globalSlideshowInterval);
+            globalSlideshowInterval = null;
+        }
+        
+        // Set first image immediately since images are preloaded
+        slideshow.style.backgroundImage = `url('${images[0]}')`;
+        
+        function showNext() {
+            // Ensure smooth transition by preloading next image
+            const nextIndex = (current + 1) % images.length;
+            const nextImg = new Image();
+            nextImg.onload = function() {
+                // Only change background when next image is loaded
+                slideshow.style.backgroundImage = `url('${images[nextIndex]}')`;
+                current = nextIndex;
+            };
+            nextImg.onerror = function() {
+                // If next image fails, still advance to next
+                slideshow.style.backgroundImage = `url('${images[nextIndex]}')`;
+                current = nextIndex;
+            };
+            nextImg.src = images[nextIndex];
+        }
+        
+        function startSlideshow() {
+            slideshowInitialized = true;
+            
+            // Clear any existing global interval
+            if (globalSlideshowInterval) {
+                clearInterval(globalSlideshowInterval);
+            }
+            
+            // Start slideshow with consistent timing
+            globalSlideshowInterval = setInterval(showNext, 3000);
+        }
+        
+        // Start slideshow immediately since images are already loaded
+        startSlideshow();
+    }
+    
+    // Initialize gallery function (for direct page access)
     function initializeGallery() {
+        // Prevent multiple initializations
+        if (slideshowInitialized) {
+            return;
+        }
+        
         // Hero slideshow background
         const images = [
+            'assets/images/1.jpg',
             'assets/images/15.jpg',
             'assets/images/16.jpg',
             'assets/images/17.jpg',
@@ -282,9 +360,47 @@ document.addEventListener('DOMContentLoaded', function() {
         const slideshow = document.querySelector('.hero-slideshow');
         if (!slideshow) return;
         
-        // Preload hero images
-        images.forEach(src => { 
+        // Clear any existing global interval
+        if (globalSlideshowInterval) {
+            clearInterval(globalSlideshowInterval);
+            globalSlideshowInterval = null;
+        }
+        
+        // Set first image immediately to prevent any background showing
+        slideshow.style.backgroundImage = `url('${images[0]}')`;
+        
+        // Track loaded images
+        let loadedImages = 0;
+        const totalImages = images.length;
+        let slideshowStarted = false;
+        
+        // Preload hero images starting with the first one
+        images.forEach((src, index) => { 
             const img = new Image(); 
+            img.onload = function() {
+                loadedImages++;
+                // Ensure first image is displayed as soon as it loads
+                if (index === 0) {
+                    slideshow.style.backgroundImage = `url('${src}')`;
+                }
+                // Start slideshow when all images are loaded
+                if (loadedImages === totalImages && !slideshowStarted) {
+                    startSlideshow();
+                }
+            };
+            img.onerror = function() {
+                console.warn(`Failed to load image: ${src}`);
+                loadedImages++;
+                // If the first image fails, try the next one immediately
+                if (index === 0 && images.length > 1) {
+                    slideshow.style.backgroundImage = `url('${images[1]}')`;
+                }
+                // Start slideshow even if some images failed
+                if (loadedImages === totalImages && !slideshowStarted) {
+                    startSlideshow();
+                }
+            };
+            // Start loading the image
             img.src = src; 
         });
         
@@ -293,8 +409,26 @@ document.addEventListener('DOMContentLoaded', function() {
             current = (current + 1) % images.length;
         }
         
-        showNext();
-        setInterval(showNext, 3000);
+        function startSlideshow() {
+            if (slideshowStarted) return;
+            slideshowStarted = true;
+            slideshowInitialized = true;
+            
+            // Clear any existing global interval
+            if (globalSlideshowInterval) {
+                clearInterval(globalSlideshowInterval);
+            }
+            
+            // Start slideshow with consistent timing
+            globalSlideshowInterval = setInterval(showNext, 3000);
+        }
+        
+        // Fallback: start slideshow after 1 second even if images haven't loaded
+        setTimeout(() => {
+            if (!slideshowStarted) {
+                startSlideshow();
+            }
+        }, 1000);
     }
     
     // Handle hash changes for direct navigation
