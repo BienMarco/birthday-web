@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'assets/images/17.jpg',
             'assets/images/18.jpg',
             'assets/images/19.jpg',
-            'assets/images/20.jpg',
+            'assets/images/4.jpg',
             'assets/images/21.jpg',
             'assets/images/22.jpg'
         ];
