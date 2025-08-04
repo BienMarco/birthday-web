@@ -245,14 +245,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function startHiddenSlideshow() {
         const images = [
             'assets/images/1.jpg',
-            'assets/images/15.jpg',
-            'assets/images/16.jpg',
-            'assets/images/17.jpg',
-            'assets/images/18.jpg',
-            'assets/images/19.jpg',
             'assets/images/4.jpg',
-            'assets/images/21.jpg',
-            'assets/images/22.jpg'
+            'assets/images/8.jpg',
+            'assets/images/10.jpg',
+            'assets/images/12.jpg',
+            'assets/images/15.jpg',
+            'assets/images/17.jpg',
+            'assets/images/23.jpg',
         ];
         
         let current = 0;
