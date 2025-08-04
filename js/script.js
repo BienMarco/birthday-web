@@ -244,14 +244,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start slideshow immediately when page loads (hidden behind splash screen)
     function startHiddenSlideshow() {
         const images = [
-            'assets/images/1.jpg',
+            'assets/images/3.jpg',
             'assets/images/4.jpg',
-            'assets/images/8.jpg',
-            'assets/images/10.jpg',
-            'assets/images/12.jpg',
-            'assets/images/15.jpg',
-            'assets/images/17.jpg',
-            'assets/images/23.jpg',
+            'assets/images/19.jpg',
+            'assets/images/5.jpg',
+            'assets/images/7.jpg',
+            'assets/images/6.jpg',
         ];
         
         let current = 0;
