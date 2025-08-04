@@ -250,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'assets/images/5.jpg',
             'assets/images/7.jpg',
             'assets/images/6.jpg',
+            'assets/images/12.jpg',
         ];
         
         let current = 0;
