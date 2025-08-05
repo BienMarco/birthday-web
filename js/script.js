@@ -159,6 +159,23 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCountdown();
     setInterval(updateCountdown, 1000);
     
+    // Function to ensure proper scroll to top on mobile
+    function scrollToTopMobile() {
+        if (window.innerWidth <= 768) {
+            // Multiple methods to ensure scroll to top works
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'instant'
+            });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            
+            // Force a reflow to ensure the scroll takes effect
+            document.body.offsetHeight;
+        }
+    }
+    
     // Improved SPA navigation for sections
     function showSection(sectionId) {
         const sections = document.querySelectorAll('.spa-section');
@@ -192,9 +209,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Scroll to top for mobile
+        // Scroll to top for mobile with improved timing
         if (window.innerWidth <= 768) {
-            window.scrollTo(0, 0);
+            // Use setTimeout to ensure the section is fully rendered before scrolling
+            setTimeout(() => {
+                scrollToTopMobile();
+            }, 100);
         }
         
         // Force layout recalculation for gallery
@@ -218,7 +238,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hash.startsWith('#')) {
                 e.preventDefault();
                 const sectionId = hash.substring(1);
-                showSection(sectionId);
+                
+                // For mobile, ensure we scroll to top properly
+                if (window.innerWidth <= 768) {
+                    // First, scroll to top immediately
+                    scrollToTopMobile();
+                    
+                    // Then show the section
+                    showSection(sectionId);
+                    
+                    // Finally, ensure we're at the top after a brief delay
+                    setTimeout(() => {
+                        scrollToTopMobile();
+                    }, 50);
+                } else {
+                    showSection(sectionId);
+                }
+                
                 window.location.hash = hash;
             }
         });
